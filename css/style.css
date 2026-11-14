@@ -1,0 +1,473 @@
+:root{
+  --bg:#c0c0c0;
+  --bg-dark:#808080;
+  --border-light:#ffffff;
+  --border-dark:#404040;
+  --border-darker:#000000;
+  --titlebar-bg:#000000;
+  --titlebar-fg:#ffffff;
+  --text:#000000;
+  --window-body-bg:#ffffff;
+  --taskbar-h:40px;
+  --dock-w:84px;
+  font-family: Tahoma, "Segoe UI", "MS Sans Serif", Verdana, sans-serif;
+}
+
+*{box-sizing:border-box;}
+html,body{
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:var(--bg);
+  color:var(--text);
+  font-size:14px;
+  -webkit-user-select:none;
+  user-select:none;
+}
+button, input, select{
+  font-family:inherit;
+  font-size:14px;
+}
+input, textarea{
+  user-select:text;
+  -webkit-user-select:text;
+}
+
+/* ---------- beveled 3D look ---------- */
+.bevel-out{
+  background:var(--bg);
+  border:1px solid var(--border-darker);
+  box-shadow:
+    inset 1px 1px 0 var(--border-light),
+    inset -1px -1px 0 var(--border-dark);
+}
+.bevel-out:active, .bevel-out.pressed{
+  box-shadow:
+    inset -1px -1px 0 var(--border-light),
+    inset 1px 1px 0 var(--border-dark);
+}
+.bevel-in{
+  background:var(--window-body-bg);
+  border:1px solid var(--border-darker);
+  box-shadow:
+    inset -1px -1px 0 var(--border-light),
+    inset 1px 1px 0 var(--border-dark);
+}
+
+/* ---------- desktop layout ---------- */
+/* El dock de iconos (los 3 accesos directos) queda oculto siempre:
+   en horizontal aparecía a la izquierda, en vertical arriba, y en
+   ambos casos se retiró para dejar más espacio a las ventanas. Las
+   mismas 3 apps siguen disponibles desde el botón "Inicio" de la
+   barra de tareas. */
+#icon-dock{
+  display:none;
+}
+#desktop{
+  position:fixed;
+  inset:0;
+  bottom:var(--taskbar-h);
+  display:grid;
+  grid-template-columns: var(--slot-a, 50%) var(--slot-b, 50%);
+}
+.desktop-icon{
+  width:68px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  background:transparent;
+  border:1px dashed transparent;
+  color:var(--text);
+  padding:6px 2px;
+  cursor:pointer;
+}
+.desktop-icon:active, .desktop-icon:focus{
+  border:1px dotted var(--border-darker);
+}
+.desktop-icon-glyph{
+  font-size:30px;
+  line-height:1;
+}
+.desktop-icon-label{
+  font-size:11px;
+  text-align:center;
+  line-height:1.2;
+}
+.slot{
+  position:relative;
+  background:var(--bg);
+  border-right:1px solid var(--border-darker);
+  overflow:hidden;
+}
+.slot:last-child{ border-right:none; }
+.slot.slot-zero{ border-right:none; }
+.slot-empty-hint{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--border-dark);
+  font-size:12px;
+  pointer-events:none;
+}
+
+/* ---------- windows ---------- */
+.window{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  background:var(--bg);
+}
+.window-titlebar{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  background:var(--titlebar-bg);
+  color:var(--titlebar-fg);
+  padding:3px 4px;
+  font-weight:bold;
+}
+.window-icon{ font-size:14px; }
+.window-title{
+  flex:1;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.window-controls{
+  display:flex;
+  gap:2px;
+}
+.win-btn{
+  width:22px;
+  height:20px;
+  line-height:18px;
+  padding:0;
+  cursor:pointer;
+  font-weight:bold;
+}
+.window-body{
+  flex:1;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  background:var(--bg);
+  overflow:hidden;
+}
+
+/* ---------- shared mini-app toolbar ---------- */
+.app-toolbar{
+  flex:0 0 auto;
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px;
+  align-items:center;
+  padding:4px;
+  border-bottom:1px solid var(--border-darker);
+  background:var(--bg);
+}
+.app-toolbar button{
+  padding:4px 8px;
+  cursor:pointer;
+}
+.app-toolbar .spacer{ flex:1; }
+.app-filename{
+  font-size:12px;
+  font-style:italic;
+  padding:0 4px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  max-width:140px;
+}
+.app-statusbar{
+  flex:0 0 auto;
+  display:flex;
+  gap:12px;
+  padding:3px 6px;
+  font-size:11px;
+  border-top:1px solid var(--border-darker);
+  background:var(--bg);
+}
+.app-body{
+  flex:1;
+  min-height:0;
+  overflow:auto;
+  background:var(--window-body-bg);
+}
+
+/* ---------- notepad ---------- */
+.notepad-textarea{
+  width:100%;
+  height:100%;
+  border:none;
+  outline:none;
+  resize:none;
+  padding:6px;
+  font-family: "Courier New", monospace;
+  font-size:13px;
+  line-height:1.4;
+  background:var(--window-body-bg);
+  color:var(--text);
+}
+
+/* ---------- spreadsheet ---------- */
+.sheet-formulabar{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding:3px 4px;
+  border-bottom:1px solid var(--border-darker);
+  background:var(--bg);
+}
+.sheet-cellref{
+  width:42px;
+  text-align:center;
+  font-weight:bold;
+  padding:3px;
+  flex:0 0 auto;
+}
+.sheet-formulainput{
+  flex:1;
+  padding:3px 4px;
+}
+.sheet-grid-wrap{
+  flex:1;
+  overflow:auto;
+  background:var(--window-body-bg);
+}
+table.sheet-grid{
+  border-collapse:collapse;
+  table-layout:fixed;
+}
+table.sheet-grid th, table.sheet-grid td{
+  border:1px solid #999;
+  padding:0;
+  min-width:72px;
+  width:72px;
+  height:22px;
+}
+table.sheet-grid th{
+  background:var(--bg);
+  font-size:12px;
+  cursor:pointer;
+  user-select:none;
+}
+table.sheet-grid th.corner{ cursor:default; width:34px; min-width:34px; }
+table.sheet-grid td.rownum{
+  background:var(--bg);
+  text-align:center;
+  font-size:11px;
+  width:34px;
+  min-width:34px;
+}
+table.sheet-grid th.filtered{
+  text-decoration:underline;
+}
+.sheet-cell-input{
+  width:100%;
+  height:100%;
+  border:none;
+  outline:none;
+  padding:2px 4px;
+  font-size:12px;
+  background:transparent;
+}
+.sheet-cell-input:focus{
+  background:#ffffcc;
+}
+tr.row-hidden{ display:none; }
+
+/* ---------- pdf viewer ---------- */
+/* El listado de pestañas va dentro de la misma fila del toolbar,
+   al lado derecho del botón "Abrir PDF(s)", para aprovechar el
+   espacio vertical. */
+.pdf-tabstrip{
+  flex:1 1 auto;
+  display:flex;
+  gap:2px;
+  overflow-x:auto;
+  min-width:0;
+}
+.pdf-tab{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding:4px 6px;
+  max-width:140px;
+  flex:0 0 auto;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.pdf-tab span.pdf-tab-name{
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.pdf-tab button.pdf-tab-close{
+  border:none;
+  background:transparent;
+  font-weight:bold;
+  cursor:pointer;
+  padding:0 2px;
+}
+.pdf-viewer-toolbar{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:4px;
+  border-bottom:1px solid var(--border-darker);
+}
+.pdf-canvas-wrap{
+  flex:1;
+  overflow:auto;
+  background:var(--bg-dark);
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:10px;
+}
+.pdf-canvas-wrap canvas{
+  background:#fff;
+  box-shadow:0 0 0 1px #000;
+}
+.pdf-empty{
+  margin:auto;
+  color:#eee;
+  font-size:13px;
+}
+
+/* ---------- taskbar ---------- */
+#taskbar{
+  position:fixed;
+  left:0; right:0; bottom:0;
+  height:var(--taskbar-h);
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding:3px 4px;
+  background:var(--bg);
+  border-top:2px solid var(--border-darker);
+  z-index:500;
+}
+#start-btn{
+  padding:4px 10px;
+  font-weight:bold;
+  cursor:pointer;
+}
+#taskbar-apps{
+  flex:1;
+  display:flex;
+  gap:4px;
+  overflow-x:auto;
+  height:100%;
+  align-items:center;
+}
+.taskbar-btn{
+  padding:4px 10px;
+  max-width:160px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  cursor:pointer;
+  text-align:left;
+}
+.taskbar-btn.active{
+  box-shadow:
+    inset -1px -1px 0 var(--border-light),
+    inset 1px 1px 0 var(--border-dark);
+}
+#view-btn{
+  flex:0 0 auto;
+  padding:4px 10px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+#clock{
+  flex:0 0 auto;
+  padding:0 10px;
+  font-variant-numeric:tabular-nums;
+}
+#start-menu{
+  position:fixed;
+  left:4px;
+  bottom:calc(var(--taskbar-h) + 2px);
+  display:flex;
+  flex-direction:column;
+  min-width:180px;
+  z-index:600;
+  background:var(--bg);
+}
+#start-menu.hidden{ display:none; }
+#start-menu button{
+  padding:8px 10px;
+  text-align:left;
+  cursor:pointer;
+  border:none;
+  background:transparent;
+}
+#start-menu button:hover, #start-menu button:active{
+  background:var(--titlebar-bg);
+  color:var(--titlebar-fg);
+}
+
+/* ---------- modal ---------- */
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+.modal-box{
+  background:var(--bg);
+  min-width:260px;
+  max-width:88vw;
+}
+.modal-titlebar{
+  background:var(--titlebar-bg);
+  color:var(--titlebar-fg);
+  padding:4px 6px;
+  font-weight:bold;
+}
+.modal-body{
+  padding:14px 12px;
+  font-size:13px;
+  line-height:1.4;
+  max-height:50vh;
+  overflow:auto;
+}
+.modal-body .modal-checklist label{
+  display:block;
+  padding:2px 0;
+}
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:6px;
+  padding:8px 10px;
+}
+.modal-actions button{
+  padding:5px 12px;
+  cursor:pointer;
+}
+
+/* ---------- narrow screens: stack slots instead of side-by-side ---------- */
+@media (max-width:760px){
+  #desktop{
+    grid-template-columns: 1fr;
+    grid-template-rows: var(--slot-a, 50%) var(--slot-b, 50%);
+  }
+  .slot{
+    border-right:none;
+    border-bottom:1px solid var(--border-darker);
+  }
+  .slot.slot-zero{ border-bottom:none; }
+}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Mini Desktop</title>
+<meta name="theme-color" content="#000000">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="desktop">
+  <div id="icon-dock">
+    <button class="desktop-icon" data-app="notepad">
+      <span class="desktop-icon-glyph">🗒</span>
+      <span class="desktop-icon-label">Bloc de notas</span>
+    </button>
+    <button class="desktop-icon" data-app="pdf">
+      <span class="desktop-icon-glyph">📄</span>
+      <span class="desktop-icon-label">Lector PDF</span>
+    </button>
+    <button class="desktop-icon" data-app="sheet">
+      <span class="desktop-icon-glyph">▦</span>
+      <span class="desktop-icon-label">Hoja de cálculo</span>
+    </button>
+  </div>
+  <div class="slot" id="slot-left"></div>
+  <div class="slot" id="slot-right"></div>
+</div>
+
+<div id="tray" style="display:none;"></div>
+
+<div id="taskbar">
+  <button id="start-btn">▦ Inicio</button>
+  <div id="start-menu" class="hidden">
+    <button data-app="notepad">🗒 Bloc de notas</button>
+    <button data-app="pdf">📄 Lector PDF</button>
+    <button data-app="sheet">▦ Hoja de cálculo</button>
+  </div>
+  <div id="taskbar-apps"></div>
+  <button id="view-btn" class="bevel-out">Vista: 50/50</button>
+  <div id="clock">--:--</div>
+</div>
+
+<template id="tpl-window">
+  <div class="window">
+    <div class="window-titlebar">
+      <span class="window-icon"></span>
+      <span class="window-title"></span>
+      <div class="window-controls">
+        <button class="win-btn win-min" type="button" aria-label="Minimizar">_</button>
+        <button class="win-btn win-close" type="button" aria-label="Cerrar">X</button>
+      </div>
+    </div>
+    <div class="window-body"></div>
+  </div>
+</template>
+
+<!-- PDF.js desde CDN (ver README para auto-hospedarlo y trabajar 100% offline) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+
+<script src="js/app-notepad.js"></script>
+<script src="js/app-sheet.js"></script>
+<script src="js/app-pdf.js"></script>
+<script src="js/shell.js"></script>
+</body>
+</html>
