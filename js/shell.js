@@ -10,14 +10,14 @@
 (function () {
   'use strict';
 
-  var APP_ORDER = ['notepad', 'sheet', 'pdf'];
+  var APP_ORDER = ['notepad', 'sheet', 'pdf', 'video', 'audio'];
   var STORAGE_KEY = 'md_shell_v1';
 
   var els = {};
   var instances = {}; // appId -> { el, controller }
   var shellState = {
     layout: { left: null, right: null },
-    apps: { notepad: 'closed', sheet: 'closed', pdf: 'closed' },
+    apps: { notepad: 'closed', sheet: 'closed', pdf: 'closed', video: 'closed', audio: 'closed' },
     // view.mode: '100' | '78-22' | '50-50'. view.bigSide: 'left' | 'right'
     // (en modo '50-50' bigSide no afecta nada, los dos miden igual).
     view: { mode: '50-50', bigSide: 'left' }
@@ -34,6 +34,11 @@
         if (!shellState.view) {
           shellState.view = { mode: '50-50', bigSide: 'left' }; // estado guardado por una versión anterior
         }
+        // migración: si el estado se guardó antes de agregar video/audio,
+        // faltarán esas claves — se asumen "cerradas" por defecto.
+        APP_ORDER.forEach(function (appId) {
+          if (!shellState.apps[appId]) shellState.apps[appId] = 'closed';
+        });
       }
     } catch (e) {
       console.warn('No se pudo leer el estado del escritorio guardado:', e);

@@ -342,6 +342,40 @@ tr.row-hidden{ display:none; }
   font-size:13px;
 }
 
+/* ---------- reproductores de video / audio ---------- */
+.media-wrap{
+  flex:1;
+  min-height:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--bg-dark);
+  overflow:hidden;
+  padding:8px;
+}
+.media-empty{
+  margin:auto;
+  color:#eee;
+  font-size:13px;
+  text-align:center;
+  padding:0 12px;
+}
+.video-player{
+  max-width:100%;
+  max-height:100%;
+  background:#000;
+}
+.audio-wrap{
+  flex-direction:column;
+  background:var(--window-body-bg);
+  gap:14px;
+  padding:16px;
+}
+.audio-player{
+  width:100%;
+  max-width:420px;
+}
+
 /* ---------- taskbar ---------- */
 #taskbar{
   position:fixed;

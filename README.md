@@ -1,8 +1,9 @@
 # Mini Desktop
 
-Mini entorno de escritorio como PWA: Bloc de notas, Lector de PDF y Hoja de
-cálculo, dentro de un "escritorio" falso con barra de tareas, pensado para
-usar con teclado + mouse Bluetooth y una pantalla externa.
+Mini entorno de escritorio como PWA: Bloc de notas, Lector de PDF, Hoja de
+cálculo, Reproductor de video y Reproductor de audio, dentro de un
+"escritorio" falso con barra de tareas, pensado para usar con teclado +
+mouse Bluetooth y una pantalla externa.
 
 ## Estructura del repo
 
@@ -16,6 +17,8 @@ mini-desktop/
 ├── js/app-notepad.js     mini-app: bloc de notas (UTF-8)
 ├── js/app-sheet.js       mini-app: hoja de cálculo (fórmulas + filtros)
 ├── js/app-pdf.js         mini-app: lector de PDF (varias pestañas)
+├── js/app-video.js       mini-app: reproductor de video
+├── js/app-audio.js       mini-app: reproductor de audio (segundo plano)
 └── icons/                iconos de la PWA (192px y 512px)
 ```
 
@@ -80,6 +83,28 @@ esas tres líneas con la ruta nueva.
 - Los PDFs que abres quedan guardados en el propio teléfono (IndexedDB)
   para que, si minimizas o recargas la app, sigan ahí sin tener que volver
   a seleccionarlos. Al cerrar la ventana con la "X" si se eliminan.
+- Se renderiza a la resolución real de píxeles de tu pantalla
+  (`devicePixelRatio`), no a la resolución "lógica" de CSS, así que se ve
+  nítido también en pantallas de alta densidad (la mayoría de teléfonos y
+  monitores modernos).
+
+**Reproductor de video**
+- Solo lectura. Abre un archivo de video con el selector nativo y lo
+  reproduce con los controles propios del navegador (play/pausa, barra de
+  progreso, volumen, pantalla completa).
+- No se guarda entre recargas completas de la PWA (al ser solo
+  reproducción, simplemente vuelves a elegir el archivo).
+
+**Reproductor de audio**
+- Solo lectura. Igual que el de video, pero para audio, y con un extra:
+  usa la **Media Session API**, así que sigue sonando aunque apagues la
+  pantalla o minimices la ventana dentro del escritorio, y además aparecen
+  controles de play/pausa en la pantalla de bloqueo / notificaciones de
+  Android.
+- Este comportamiento de "segundo plano" depende del navegador y de la
+  configuración de ahorro de batería de tu teléfono — en la gran mayoría
+  de los Android con Chrome funciona bien, pero algunos fabricantes son
+  más agresivos cerrando apps en segundo plano.
 
 ## El gestor de ventanas, en corto
 

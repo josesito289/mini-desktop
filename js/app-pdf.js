@@ -176,14 +176,27 @@
         renderViewerState();
         var tab = activeTabId ? findTab(activeTabId) : null;
         if (!tab || !tab.pdfDoc) return;
+        var renderToken = (tab.renderToken = (tab.renderToken || 0) + 1);
         tab.pdfDoc.getPage(tab.page).then(function (page) {
+          if (tab.renderToken !== renderToken) return; // llegó una página/zoom más reciente mientras esperábamos
+          // Para que se vea nítido en pantallas de alta densidad (la
+          // mayoría de teléfonos y monitores modernos), dibujamos el
+          // canvas al tamaño real en píxeles físicos (CSS px * devicePixelRatio)
+          // y luego lo "encogemos" de vuelta a su tamaño lógico con CSS.
+          // Si no se hace esto, PDF.js dibuja 1 píxel de canvas por cada
+          // píxel CSS y el navegador termina estirando esa imagen, lo que
+          // se ve borroso en cualquier pantalla con densidad > 1.
+          var outputScale = window.devicePixelRatio || 1;
           var viewport = page.getViewport({ scale: tab.scale });
-          canvas.width = viewport.width;
-          canvas.height = viewport.height;
+          canvas.width = Math.floor(viewport.width * outputScale);
+          canvas.height = Math.floor(viewport.height * outputScale);
+          canvas.style.width = Math.floor(viewport.width) + 'px';
+          canvas.style.height = Math.floor(viewport.height) + 'px';
           var ctx = canvas.getContext('2d');
+          var transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
           canvasWrap.innerHTML = '';
           canvasWrap.appendChild(canvas);
-          page.render({ canvasContext: ctx, viewport: viewport });
+          page.render({ canvasContext: ctx, viewport: viewport, transform: transform });
         }).catch(function (err) {
           console.warn('No se pudo renderizar la página:', err);
         });

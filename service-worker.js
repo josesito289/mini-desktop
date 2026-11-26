@@ -6,7 +6,7 @@
    sube CACHE_VERSION en 1 (ej: 'v1' -> 'v2') para que los
    teléfonos que ya instalaron la app bajen la versión nueva.
    ============================================================ */
-var CACHE_VERSION = 'mini-desktop-v1';
+var CACHE_VERSION = 'mini-desktop-v2';
 
 var APP_SHELL = [
   './',
@@ -17,6 +17,8 @@ var APP_SHELL = [
   './js/app-notepad.js',
   './js/app-sheet.js',
   './js/app-pdf.js',
+  './js/app-video.js',
+  './js/app-audio.js',
   './icons/icon-192.png',
   './icons/icon-512.png'
 ];
